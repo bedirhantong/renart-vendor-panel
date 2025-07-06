@@ -9,6 +9,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl)
   }
 
+  // Allow public routes
+  const publicRoutes = ['/login', '/signup']
+  if (publicRoutes.includes(pathname)) {
+    return NextResponse.next()
+  }
+
   return NextResponse.next()
 }
 

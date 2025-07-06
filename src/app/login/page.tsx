@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -75,6 +76,16 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Test Credentials Hint */}
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <h4 className="text-sm font-medium text-blue-900 mb-2">Test Vendor Account</h4>
+            <div className="text-xs text-blue-700 space-y-1">
+              <p><strong>Email:</strong> vendor@renart.com</p>
+              <p><strong>Password:</strong> renart123</p>
+              <p className="text-blue-600">Use these credentials to test the vendor panel</p>
+            </div>
+          </div>
+          
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
@@ -145,6 +156,18 @@ export default function LoginPage() {
                   'Sign in'
                 )}
               </Button>
+
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">
+                  Don't have an account?{' '}
+                  <Link 
+                    href="/signup" 
+                    className="font-medium text-primary hover:underline"
+                  >
+                    Create vendor account
+                  </Link>
+                </p>
+              </div>
             </form>
           </Form>
         </CardContent>

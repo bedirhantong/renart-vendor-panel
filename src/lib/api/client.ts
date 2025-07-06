@@ -80,6 +80,27 @@ export const authApi = {
     })
   },
 
+  register: async (userData: {
+    email: string
+    password: string
+    firstName: string
+    lastName: string
+    storeName: string
+    storeDescription?: string
+  }) => {
+    return apiRequest<{
+      user: any
+    }>('/api/v1/public/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: userData.email,
+        password: userData.password,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+      }),
+    })
+  },
+
   logout: async () => {
     return apiRequest('/api/v1/public/auth/logout', {
       method: 'POST',
