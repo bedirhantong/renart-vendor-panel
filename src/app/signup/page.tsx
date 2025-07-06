@@ -13,18 +13,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useAuthStore } from '@/store/useStore'
-import { authApi } from '@/lib/api/client'
+import { vendorAuthApi } from '@/lib/api/client'
 import { toast } from 'sonner'
 
-// Signup schema
+// Vendor signup schema
 const signupSchema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string().min(6, 'Please confirm your password'),
-  storeName: z.string().min(1, 'Store name is required'),
-  storeDescription: z.string().optional(),
+  businessName: z.string().min(1, 'Business name is required'),
+  businessType: z.string().min(1, 'Business type is required'),
+  contactName: z.string().min(1, 'Contact name is required'),
+  contactPhone: z.string().min(1, 'Contact phone is required'),
+  businessAddress: z.string().min(1, 'Business address is required'),
+  taxId: z.string().optional(),
+  description: z.string().optional(),
+  website: z.string().url('Invalid URL').optional().or(z.literal('')),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -49,13 +53,17 @@ export default function SignupPage() {
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
       email: '',
       password: '',
       confirmPassword: '',
-      storeName: '',
-      storeDescription: '',
+      businessName: '',
+      businessType: '',
+      contactName: '',
+      contactPhone: '',
+      businessAddress: '',
+      taxId: '',
+      description: '',
+      website: '',
     },
   })
 
@@ -63,17 +71,21 @@ export default function SignupPage() {
     setIsLoading(true)
     
     try {
-      // Register user via API
-      const response = await authApi.register({
+      // Register vendor via API
+      const response = await vendorAuthApi.register({
         email: data.email,
         password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        storeName: data.storeName,
-        storeDescription: data.storeDescription,
+        businessName: data.businessName,
+        businessType: data.businessType,
+        contactName: data.contactName,
+        contactPhone: data.contactPhone,
+        businessAddress: data.businessAddress,
+        taxId: data.taxId,
+        description: data.description,
+        website: data.website,
       })
       
-      toast.success('Registration successful! Please login to continue.')
+      toast.success('Vendor registration successful! You can now login.')
       router.push('/login')
     } catch (error: any) {
       console.error('Signup error:', error)

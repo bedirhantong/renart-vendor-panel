@@ -2,8 +2,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002'
 
 export interface ApiResponse<T = any> {
   success: boolean
-  message: string
-  data: T
+  message: T | string
+  data: T | null
 }
 
 export class ApiError extends Error {
@@ -66,44 +66,74 @@ export async function apiRequest<T = any>(
   }
 }
 
-// Auth API calls
-export const authApi = {
+// Vendor Auth API calls
+export const vendorAuthApi = {
   login: async (email: string, password: string) => {
     return apiRequest<{
-      user: any
-      token: string
-      refreshToken: string
-      expiresAt: number
-    }>('/api/v1/public/auth/login', {
+      vendor: {
+        id: string
+        email: string
+        businessName: string
+        contactPersonName: string
+        phoneNumber: string
+        businessAddress: string
+        businessType: string
+        status: string
+      }
+      tokens: {
+        accessToken: string
+        refreshToken: string
+        expiresIn: string
+      }
+    }>('/api/v1/vendor-auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     })
   },
 
-  register: async (userData: {
+  register: async (vendorData: {
     email: string
     password: string
-    firstName: string
-    lastName: string
-    storeName: string
-    storeDescription?: string
+    businessName: string
+    businessType: string
+    contactName: string
+    contactPhone: string
+    businessAddress: string
+    taxId?: string
+    description?: string
+    website?: string
   }) => {
     return apiRequest<{
-      user: any
-    }>('/api/v1/public/auth/register', {
+      vendor: any
+    }>('/api/v1/vendor-auth/register', {
       method: 'POST',
-      body: JSON.stringify({
-        email: userData.email,
-        password: userData.password,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-      }),
+      body: JSON.stringify(vendorData),
     })
   },
 
   logout: async () => {
-    return apiRequest('/api/v1/public/auth/logout', {
+    return apiRequest('/api/v1/vendor-auth/logout', {
       method: 'POST',
+    })
+  },
+
+  refreshToken: async (refreshToken: string) => {
+    return apiRequest<{
+      tokens: {
+        accessToken: string
+        refreshToken: string
+        expiresIn: string
+      }
+    }>('/api/v1/vendor-auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken }),
+    })
+  },
+
+  changePassword: async (currentPassword: string, newPassword: string) => {
+    return apiRequest('/api/v1/vendor-auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ currentPassword, newPassword }),
     })
   },
 }
@@ -126,8 +156,22 @@ export const vendorApi = {
 
   getDashboard: async () => {
     return apiRequest<{
-      statistics: any
-      topProducts: any[]
+      statistics: {
+        products: {
+          total: number
+          active: number
+          inactive: number
+          recent: number
+        }
+        favorites: {
+          total: number
+        }
+      }
+      topProducts: Array<{
+        id: string
+        name: string
+        favoriteCount: number
+      }>
     }>('/api/v1/vendor/dashboard')
   },
 

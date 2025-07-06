@@ -47,9 +47,10 @@ const navigation = [
 
 interface SidebarProps {
   className?: string
+  collapsed?: boolean
 }
 
-export function Sidebar({ className }: SidebarProps) {
+export function Sidebar({ className, collapsed = false }: SidebarProps) {
   const pathname = usePathname()
   const { store } = useAuthStore()
 
@@ -58,16 +59,24 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="space-y-4 py-4">
         {/* Logo/Store Name */}
         <div className="px-3 py-2">
-          <div className="flex items-center space-x-2">
+          <div className={cn(
+            "flex items-center",
+            collapsed ? "justify-center" : "space-x-2"
+          )}>
             <Store className="h-6 w-6" />
-            <h2 className="text-lg font-semibold tracking-tight">
-              {store?.name || 'RENART Store'}
-            </h2>
+            {!collapsed && (
+              <h2 className="text-lg font-semibold tracking-tight">
+                {store?.name || 'RENART Store'}
+              </h2>
+            )}
           </div>
         </div>
 
         {/* Navigation */}
-        <div className="px-3 py-2">
+        <div className={cn(
+          collapsed ? "px-2" : "px-3",
+          "py-2"
+        )}>
           <div className="space-y-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href
@@ -76,14 +85,19 @@ export function Sidebar({ className }: SidebarProps) {
                   key={item.name}
                   variant={isActive ? 'secondary' : 'ghost'}
                   className={cn(
-                    'w-full justify-start',
+                    'w-full',
+                    collapsed ? 'justify-center px-2' : 'justify-start',
                     isActive && 'bg-secondary'
                   )}
                   asChild
+                  title={collapsed ? item.name : undefined}
                 >
                   <Link href={item.href}>
-                    <item.icon className="mr-2 h-4 w-4" />
-                    {item.name}
+                    <item.icon className={cn(
+                      "h-4 w-4",
+                      !collapsed && "mr-2"
+                    )} />
+                    {!collapsed && item.name}
                   </Link>
                 </Button>
               )

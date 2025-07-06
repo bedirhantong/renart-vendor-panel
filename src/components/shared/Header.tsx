@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuthStore } from '@/store/useStore'
+import { useAuthStore, useUIStore } from '@/store/useStore'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -12,18 +12,19 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { MobileSidebar } from './Sidebar'
-import { User, LogOut, Settings } from 'lucide-react'
+import { User, LogOut, Settings, Menu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { authApi } from '@/lib/api/client'
+import { vendorAuthApi } from '@/lib/api/client'
 import { toast } from 'sonner'
 
 export function Header() {
   const { user, store, clearAuth } = useAuthStore()
+  const { toggleSidebar } = useUIStore()
   const router = useRouter()
 
   const handleLogout = async () => {
     try {
-      await authApi.logout()
+      await vendorAuthApi.logout()
       clearAuth()
       router.push('/login')
       toast.success('Logged out successfully')
@@ -44,6 +45,16 @@ export function Header() {
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex gap-6 md:gap-10">
           <MobileSidebar />
+          
+          {/* Desktop Sidebar Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden md:flex"
+            onClick={toggleSidebar}
+          >
+            <Menu className="h-4 w-4" />
+          </Button>
           
           <div className="hidden md:flex items-center space-x-2">
             <h1 className="text-xl font-semibold">

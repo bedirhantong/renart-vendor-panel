@@ -12,7 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useAuthStore } from '@/store/useStore'
-import { authApi, vendorApi } from '@/lib/api/client'
+import { vendorAuthApi, vendorApi } from '@/lib/api/client'
 import { loginSchema, type LoginFormData } from '@/lib/validators/schemas'
 import { toast } from 'sonner'
 
@@ -41,21 +41,51 @@ export default function LoginPage() {
     setIsLoading(true)
     
     try {
-      // Login via API
-      const loginResponse = await authApi.login(data.email, data.password)
+      // Login via vendor auth API
+      const loginResponse = await vendorAuthApi.login(data.email, data.password)
       
-      // Get vendor profile to check if user is a vendor
-      const profileResponse = await vendorApi.getProfile()
+      // Extract vendor and token data from response
+      console.log('Login response:', loginResponse)
+      
+      // Backend returns data in .message property
+      const responseData = loginResponse.message || loginResponse.data
+      const vendor = responseData.vendor
+      const tokens = responseData.tokens
+      
+      if (!vendor || !tokens) {
+        throw new Error('Invalid response format from server')
+      }
+      
+      // Create user object from vendor data
+      const user = {
+        id: vendor.id,
+        email: vendor.email,
+        firstName: vendor.contactPersonName?.split(' ')[0] || '',
+        lastName: vendor.contactPersonName?.split(' ').slice(1).join(' ') || ''
+      }
+      
+      // Create store object from vendor data
+      const store = {
+        id: vendor.id,
+        name: vendor.businessName,
+        description: vendor.description,
+        logoUrl: vendor.logoUrl,
+        email: vendor.email,
+        isActive: vendor.status === 'active'
+      }
+      
+      console.log('Created user:', user)
+      console.log('Created store:', store)
+      console.log('Access token:', tokens.accessToken)
       
       // Set auth state
-      setAuth(
-        loginResponse.data.user,
-        profileResponse.data.store,
-        loginResponse.data.token
-      )
+      setAuth(user, store, tokens.accessToken)
       
+      console.log('Auth state set, redirecting...')
       toast.success('Login successful!')
-      router.push('/dashboard')
+      
+      // Force redirect to dashboard
+      window.location.href = '/dashboard'
     } catch (error: any) {
       console.error('Login error:', error)
       toast.error(error.message || 'Login failed. Please try again.')

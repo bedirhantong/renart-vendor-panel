@@ -20,6 +20,7 @@ import {
   Clock
 } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface DashboardData {
   statistics: {
@@ -43,7 +44,18 @@ interface DashboardData {
 export default function DashboardPage() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const { store } = useAuthStore()
+  const router = useRouter()
+  const { store, isAuthenticated, user } = useAuthStore()
+  
+  // Auth check
+  useEffect(() => {
+    console.log('Dashboard auth check:', { isAuthenticated, user, store })
+    if (!isAuthenticated) {
+      console.log('Not authenticated, redirecting to login')
+      router.push('/login')
+      return
+    }
+  }, [isAuthenticated, router])
 
   const fetchDashboardData = async () => {
     try {
