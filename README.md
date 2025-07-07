@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RENART Vendor Panel
 
-## Getting Started
+RENART Vendor Panel, satıcıların ürünlerini yönetebileceği, satış istatistiklerini takip edebileceği ve mağaza ayarlarını yapılandırabileceği modern bir web uygulamasıdır. Bu panel, RENART e-ticaret platformunun vendor (satıcı) tarafını oluşturmaktadır.
 
-First, run the development server:
+## 🎯 Proje Amacı
 
+Bu panel aşağıdaki temel işlevleri sağlamaktadır:
+
+- **Ürün Yönetimi**: Satıcıların ürünlerini ekleyip, düzenleyip, yönetebilmesi
+- **Satış Analytics**: Satış verilerinin görselleştirilmesi ve analiz edilmesi
+- **Mağaza Ayarları**: Satıcı mağaza bilgilerinin yapılandırılması
+- **Dashboard**: Genel istatistiklerin ve önemli metriklerin gösterilmesi
+- **Kimlik Doğrulama**: Güvenli giriş ve kullanıcı yetkilendirme sistemi
+
+## 🛠️ Kullanılan Teknolojiler
+
+### Frontend Framework & UI
+- **[Next.js 15](https://nextjs.org)** - React tabanlı full-stack framework
+- **[React 19](https://react.dev)** - UI kütüphanesi
+- **[TypeScript](https://www.typescriptlang.org)** - Type-safe JavaScript
+- **[Tailwind CSS 4](https://tailwindcss.com)** - Utility-first CSS framework
+
+### UI Komponentleri
+- **[Radix UI](https://www.radix-ui.com)** - Headless UI primitives
+- **[Lucide React](https://lucide.dev)** - İkon kütüphanesi
+- **[Sonner](https://sonner.emilkowal.ski)** - Toast bildirimleri
+- **[next-themes](https://github.com/pacocoursey/next-themes)** - Tema yönetimi
+
+### State Management & Forms
+- **[Zustand](https://zustand-demo.pmnd.rs)** - Lightweight state management
+- **[React Hook Form](https://react-hook-form.com)** - Form yönetimi
+- **[Zod](https://zod.dev)** - Schema validation
+
+### Backend & Database
+- **[Supabase](https://supabase.com)** - Backend-as-a-Service
+- **[Supabase SSR](https://supabase.com/docs/guides/auth/server-side-rendering)** - Server-side rendering desteği
+
+### Development Tools
+- **[ESLint](https://eslint.org)** - Code linting
+- **[PostCSS](https://postcss.org)** - CSS processing
+
+## 🚀 Kurulum ve Çalıştırma
+
+### Gereksinimler
+- Node.js 18+ 
+- npm, yarn, pnpm veya bun
+
+### Kurulum Adımları
+
+1. **Repository'yi klonlayın:**
+```bash
+git clone <repository-url>
+cd renart-vendor-panel
+```
+
+2. **Bağımlılıkları yükleyin:**
+```bash
+npm install
+# veya
+yarn install
+# veya
+pnpm install
+# veya
+bun install
+```
+
+3. **Ortam değişkenlerini ayarlayın:**
+```bash
+cp .env.example .env.local
+```
+Gerekli Supabase ve diğer servis ayarlarını `.env.local` dosyasına ekleyin.
+
+4. **Development sunucusunu başlatın:**
 ```bash
 npm run dev
-# or
+# veya
 yarn dev
-# or
+# veya
 pnpm dev
-# or
+# veya
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. **Tarayıcınızda açın:**
+[http://localhost:3000](http://localhost:3000) adresine gidin.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Proje Yapısı
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── analytics/         # Satış analitikleri sayfası
+│   ├── dashboard/         # Ana dashboard
+│   ├── login/            # Giriş sayfası
+│   ├── products/         # Ürün yönetimi
+│   ├── signup/           # Kayıt sayfası
+│   └── store-settings/   # Mağaza ayarları
+├── components/
+│   ├── cards/            # Dashboard kartları
+│   ├── forms/            # Form komponentleri
+│   ├── shared/           # Ortak komponentler
+│   └── ui/               # UI primitives
+├── lib/
+│   ├── api/              # API client
+│   ├── auth/             # Kimlik doğrulama
+│   ├── supabase/         # Supabase yapılandırması
+│   ├── utils/            # Utility fonksiyonları
+│   └── validators/       # Zod şemaları
+└── store/                # Zustand store'ları
+```
 
-## Learn More
+## 🔧 Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Development sunucusunu başlatır
+- `npm run build` - Production build oluşturur
+- `npm run start` - Production sunucusunu başlatır
+- `npm run lint` - ESLint kontrolü yapar
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌟 Özellikler
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- ✅ **Modern UI/UX**: Radix UI ve Tailwind CSS ile oluşturulmuş modern arayüz
+- ✅ **Type Safety**: TypeScript ile tam tip güvenliği
+- ✅ **Responsive Design**: Tüm cihazlarda uyumlu tasarım
+- ✅ **Dark/Light Mode**: Tema değiştirme desteği
+- ✅ **Real-time Data**: Supabase ile gerçek zamanlı veri
+- ✅ **Form Validation**: Zod ile güçlü form doğrulama
+- ✅ **State Management**: Zustand ile basit state yönetimi
+- ✅ **Authentication**: Supabase Auth ile güvenli kimlik doğrulama
