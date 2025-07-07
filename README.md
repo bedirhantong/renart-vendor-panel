@@ -126,3 +126,12 @@ src/
 - ✅ **Form Validation**: Zod ile güçlü form doğrulama
 - ✅ **State Management**: Zustand ile basit state yönetimi
 - ✅ **Authentication**: Supabase Auth ile güvenli kimlik doğrulama
+
+## 📝 Lisans
+
+Bu proje özel kullanım içindir. Tüm hakları saklıdır.
+
+## 👨‍💻 Geliştirici
+
+**Bedirhan Tong**
+- GitHub: [@bedirhantong](https://github.com/bedirhantong)
